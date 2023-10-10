@@ -1,0 +1,281 @@
+﻿{% extends 'base.html' %}
+{% load static %}
+{% load extra_tags %}
+
+{% block body %}
+<!-- main -->
+<main class="search-page default space-top-30">
+    <div class="container">
+        <div class="row">
+            <div class="col-12 hidden-xs">
+                <div class="brand-slider card border_all ">
+                    <header class="card-header">
+                        <h3 class="card-title"><span>دسته بندی ها</span></h3>
+                    </header>
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="row">
+                                {% for category in categories %}
+                                <div class="col-6 col-md-2 contact-bigicon">
+                                    <a href="{% url 'product:list-cat-view' cat_id=category.id  %}"target="_blank">
+                                        <img class="img-responsive imgpad" src="{{category.image.url}}" alt="{{category.alt}}" />
+                                        <b class="title-3 light-black">{{category.name}}</b>
+                                    </a>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <aside class="sidebar-page col-12 col-sm-12 col-md-4 col-lg-3 ">
+                <form method='get' id="filter-form" action="{% url 'product:list-view' %}">
+                    <div class="box">
+                        <header class="card-header">
+                            <h3 class="card-title"><span class="space-right-10">رنگ</span></h3>
+                        </header>
+                        <div class="box-content">
+                            <div class="collapse show">
+                                <div class="form-account-agree">
+                                    <label class="checkbox-form checkbox-primary">
+                                        <input type="checkbox" id="agree" name="colors" value="#000000">
+                                        <span class="checkbox-check"></span>
+                                    </label>
+                                    <label for="agree"> مشکی</label>
+                                    <span class="color_pro_sel" style=" background-color: #000;"></span>
+                                </div>
+                                <div class="form-account-agree">
+                                    <label class="checkbox-form checkbox-primary">
+                                        <input type="checkbox" id="agree" name="colors" value="#FF0000"> 
+                                        <span class="checkbox-check"></span>
+                                    </label>
+                                    <label for="agree"> قرمز</label>
+                                    <span class="color_pro_sel" style=" background-color: #ff0000;"></span>
+
+                                </div>
+                                <div class="form-account-agree">
+                                    <label class="checkbox-form checkbox-primary">
+                                        <input type="checkbox" id="agree" name="colors" value="#FFD800">
+                                        <span class="checkbox-check"></span>
+                                    </label>
+                                    <label for="agree"> زرد</label>
+                                    <span class="color_pro_sel" style=" background-color: #ffd800;"></span>
+
+                                </div>
+
+                                <div class="form-account-agree">
+                                    <label class="checkbox-form checkbox-primary">
+                                        <input type="checkbox" id="agree" name="colors" value="#FFFFFF">
+                                        <span class="checkbox-check"></span>
+                                    </label>
+                                    <label for="agree"> سفید</label>
+                                    <span class="color_pro_sel" style=" background-color: #ffffff;"></span>
+                                </div>
+
+                                <div class="form-account-agree">
+                                    <label class="checkbox-form checkbox-primary">
+                                        <input type="checkbox" id="agree" name="colors" value="#0000FF">
+                                        <span class="checkbox-check"></span>
+                                    </label>
+                                    <label for="agree"> آبی</label>
+                                    <span class="color_pro_sel" style=" background-color: #0000ff;"></span>
+                                </div>
+
+                                
+
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="box ">
+
+                        <header class="card-header">
+                            <h3 class="card-title"><span class="space-right-10">قیمت</span></h3>
+                        </header>
+                        <div class="box-content space-40 space-right-25 space-left-25">
+                            <div id="slider">
+                            </div>
+                        </div>
+
+
+                    </div>
+
+                    <div class="box">
+                        <header class="card-header">
+                            <h3 class="card-title"><span class="space-right-10">لیست برند ها</span></h3>
+                        </header>
+                        <div class="box-content">
+                            <div class="collapse show">
+                                {% for brand in brands %}
+                                <div class="form-account-agree">
+                                    <label class="checkbox-form checkbox-primary">
+                                        <input type="checkbox" id="agree" name="brands" value="{{brand.name}}">
+                                        <span class="checkbox-check"></span>
+                                    </label>
+                                    <label for="agree">{{brand.name}}</label>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="box">
+                        <div class="box-content">
+                            <input type="checkbox" name="in-stock" class="bootstrap-switch" checked />
+                            <label for="">موجود در انبار مسای</label>
+                        </div>
+                    </div>
+
+                    <div class="box">
+                        <div class="box-content">
+                            <input type="checkbox" name="fast-delivery" class="bootstrap-switch" checked />
+                            <label for="">ارسال فوری</label>
+                        </div>
+                    </div>
+                    <button  id="submit-filter-form" class="btn btn-main-masai">اعمال فیلتر</button>
+                </form>
+            </aside>
+            <div class="col-12 col-sm-12 col-md-8 col-lg-9">
+                
+                <div class="listing default ">
+                    <div class="listing-header default marg_all0">
+                        <ul class="Search_list nav nav-tabs " role="tablist" >
+                            <li>
+                                <a  id="-created_date" href="{{request.get_full_path|order_by_url_maker:"-created_date"}}" 
+                                    aria-expanded="false">جدیدترین محصولات</a>
+                            </li>
+                            <li>
+                                <a href="{{request.get_full_path|order_by_url_maker:"-sales_number"}}"
+                                    aria-expanded="false">‌بیشترین فروش‌</a>
+                            </li>
+                            <li>
+                                <a id="price" href="{{request.get_full_path|order_by_url_maker:"price"}}"
+                                    aria-expanded="false">‌براساس ارزان ترین</a>
+                            </li>
+                            <li>
+                                <a id="-price" href="{{request.get_full_path|order_by_url_maker:"-price"}}"
+                                    aria-expanded="false">‌براساس گران ترین</a>
+                            </li>
+                        </ul>
+                        <div class="box_filter_search">
+                            <ul class="filter_search">
+                                <li>
+                                    <span>قیمت از {{min_price}} تا {{max_price}}</span>
+                                </li>
+                                {% if category %}
+                                <li>
+                                    <span>دسته : {{category.name}}</span>
+                                </li>
+                                {% endif %}
+                                {% for color in selected_colors %}
+                                <li style="background-color: {{color}};">
+                                    <span >رنگ</span>
+                                </li>
+                                {% endfor %}
+                                {% for brand in selected_brands %}
+                                <li>
+                                    <span>{{brand}}</span>
+                                </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                        
+                    </div>
+                    <div class="tab-content default text-center">
+                        <div class="tab-pane active" id="suggestion" role="tabpanel" aria-expanded="true">
+                            
+                                <div class="row listing-items">
+                                    {% for product in products %}
+                                    <div class="col-xl-4 col-lg-4 col-md-6 col-12 list_search_p ">
+                                        <div class="product-box">
+                                            <div class="product-seller-details product-seller-details-item-grid">
+                                                <span class="search_prod_icon">
+                                                    <i class="fa fa-search search_icon_search" aria-hidden="true"></i>
+                                                    <i id="{{product.id}}" class="fa fa-heart 
+                                                    {% if product in wishlist.product.all %}
+                                                    search_icon_like
+                                                    {% else %}
+                                                    search_icon_like_2
+                                                    {% endif %}
+                                                    
+                                                    " aria-hidden="true" data-product_id="{{product.id}}"></i>
+                                                </span>
+                                                
+
+                                                <span class="search_prod_btn">
+                                                    <a href="{% url 'cart:add_to_cart' %}?product_id={{product.id}}">
+                                                        <i class="fa fa fa-cart-arrow-down search_icon_cart" aria-hidden="true"></i>
+                                                    </a>
+                                                </span>
+                                            </div>
+                                            <a class="product-box-img" href="{% url 'product:detail-view' id=product.id  %}">
+                                                <img src="{{product.image.url}}" height="281px" alt="{{product.alt}}">
+                                            </a>
+                                            <div class="product-box-content">
+                                                <div class="product-box-content-row">
+                                                    <div class="product_title">
+                                                        <a href="#">
+                                                            {{product.name}}
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                                <div class="product-box-row product_price_search">
+                                                    <div class="price">
+                                                        {% if product.discount %}
+                                                        <del><span>{{product.price}}<span>تومان</span></span></del>
+                                                        <span class="discount_badge">{{product.discount}}%</span>
+                                                        {% endif %}
+                                                        <ins><span>{{product.main_discount_call}}<span>تومان</span></span></ins>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                                
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+<!-- main -->
+{% endblock body %}
+ 
+{% block js %}
+<script>
+    $(document).ready(function(){
+        $('#submit-filter-form').click(function(e){
+            e.preventDefault()
+            let min_price = $('.noUi-handle-upper').attr('aria-valuemin')
+            let max_price = $('.noUi-handle-upper').attr('aria-valuenow')
+            $('#filter-form').append(`
+            <input type="hidden" name="min_price" value="${min_price}">
+            <input type="hidden" name="max_price" value="${max_price}">
+            `)
+            document.getElementById("filter-form").submit();
+        });
+        $('#{{order_by}}').addClass("active");
+        $('.fa-heart').click(function(){
+            let product_id = $(this).data('product_id')
+            $.ajax({
+                type : 'GET',
+                url : '{% url "product:add-to-wishlist" %}',
+                data : {'product_id':product_id}, 
+                dataType : 'json', 
+                success : function (data) {
+                    $(`#${data.id}`).attr('class', `fa fa-heart ${data.css_class}`);
+                    Swal.fire({
+                        icon: data.icon,
+                        text: data.message,
+                    })
+                },
+                error: function(data){ alert('error'); }
+            })
+        });
+
+    });
+</script>
+{% endblock js %}

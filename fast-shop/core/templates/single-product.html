@@ -1,0 +1,298 @@
+﻿{% extends 'base.html' %}
+{% load static %}
+
+{% block css %}
+<link href="{% static 'assets/css/plugins/prettyphoto/css/prettyPhoto.css' %}" rel="stylesheet" />
+
+{% endblock css %}
+
+
+{% block body %}
+<!-- main -->
+<main class="single-product default">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <nav>
+                    <ul class="breadcrumb">
+                        <li>
+                            <i class="fa fa-home" aria-hidden="true"></i>
+                        </li>
+                        <li>
+                            <a href="#"><span>{{product.category.name}}</span></a>
+                        </li>
+                        <li>
+                            <a href="#"><span>{{product.brand.name}}</span></a>
+                        </li>
+                        <li>
+                            <span>  {{product.name}}  </span>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <article class="product">
+                    <div class="row product_main_details">
+                        <div class="col-lg-5 col-md-6 col-sm-12">
+                            <div class="product-gallery default">
+                                <img class="main_img_gallery" src="{{product.image.url}}" alt={{product.alt}} />
+                                <section class="testimonial py-3" id="testimonial">
+                                    <div class="container">
+                                        <div class="row gallery">
+                                            {% for obj in product.photogallery_set.all %}
+                                            <div class="col-4 col-md-3 pd"><a href="{{obj.image.url}}" rel="prettyPhoto[gallery1]"><img src="{{obj.image.url}}" class="img-thumb" alt="{{obj.text}}" /></a></div>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                </section>
+                            </div>
+                            <ul class="gallery-options">
+                                <li>
+                                    <button class="add-favorites favorites2"><i class="fa fa-heart"></i></button>
+                                </li>
+                                <li>
+                                    <button class="favorites2" data-toggle="modal" data-target="#myModal"><i class="fa fa-share-alt"></i></button>
+                                </li>
+                            </ul>
+                            <!-- Modal Core -->
+                            <div class="modal-share modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                            <h4 class="modal-title" id="myModalLabel">به اشتراک گذاشتن</h4>
+                                        </div>
+                                        
+                                        <div class="modal-footer">
+                                            <form class="default">
+                                                <div class="row">
+                                                    <div class="col-12">
+                                                            <p>
+                                                                برای کپی آدرس در کادر زیر دابل کلیک کنید
+                                                            </p>
+                                                        <p class="right-side-header shareurlvalue" title="کپی بعد دوبار کلیک" id="text" onclick="copyElementText(this.id)">http://www.mysite.com/single-product.html</p>
+
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Modal Core -->
+                        </div>
+                        <div class="col-lg-7 col-md-6 col-sm-12 " >
+                            
+
+                                <h2 class="product-title ">
+                                    <a href="#">  {{product.name}}  </a>
+                                </h2>
+                                <hr class="hr-text">
+                                <div class="row">
+                                    <div class="col-6">
+                                        <ul class="list-group space-15">
+                                            <li class="list-group-item">رنگ محصول:<span class="color_pro_sel" style="background-color: {{product.color}};top: 0px;"></span></li>
+                                            {% for property in product.string1 %}
+                                            <li class="list-group-item">{{property}}</li>
+                                            {% endfor %}
+                                        </ul>
+                                    </div>
+                                    <div class="col-6">
+                                        <ul class="list-group space-15">
+                                            {% for property in product.string2 %}
+                                            <li class="list-group-item">{{property}}</li>
+                                            {% endfor %}
+                                        </ul>
+                                    </div>
+                                    <div class="col-lg-12 col-md-12 col-sm-12 product_main_pr">
+                                        <div class="time_pr">
+                                            <div class="row">
+                                                <div class="col-12 upda">
+                                                    <b>
+                                                        <i class="fa fa-calendar" aria-hidden="true"></i>
+                                                        زمان ارسال محصول :
+                                                    </b>
+                                                    {{template_setting.order_deliver_time}}
+                                                </div>
+                                                <div class="col-12 col-lg-12 col-md-12">
+                                                    <div class="price space-15">
+                                                        {% if product.discount %}
+                                                        <del><span>{{product.price}}<span>تومان</span></span></del>
+                                                        {% endif %}
+                                                        <ins><span>{{product.main_discount_call}}<span>تومان</span></span></ins>
+                                                    </div>
+                                                    <div class="col-12 timer-title text--center">
+
+                                                        <a href="{% url 'cart:add_to_cart' %}?product_id={{product.id}}" class="btn btn-main-masai big_btn">افزودن به سبد</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <p class="txt_note">
+                                            <i class="fa fa-info" aria-hidden="true"></i>
+                                            {{product.category.return_condition}}
+                                        </p>
+                                    </div>
+                                    
+                                </div>
+                            
+                                
+                        </div>
+                        
+                    </div>
+                </article>
+            </div>
+        </div>
+        <div class="container">
+            <div class="row">
+                <div class="col-12 default no-padding bg_single_product">
+                    <div class="product-tabs default">
+                        <div class="box-tabs default">
+                            <ul class="nav" role="tablist">
+                                <li class="box-tabs-tab">
+                                    <a class="active " data-toggle="tab" href="#desc" role="tab" aria-expanded="true">
+                                            توضیحات تکمیلی
+                                    </a>
+                                </li>
+                                <li class="box-tabs-tab">
+                                    <a data-toggle="tab" href="#params" role="tab" aria-expanded="false">
+                                            مشخصات محصول
+                                    </a>
+                                </li>
+                                <li class="box-tabs-tab">
+                                    <a data-toggle="tab" href="#comments" role="tab" aria-expanded="false">
+                                            دیدگاه خریداران
+                                    </a>
+                                </li>
+                                <li class="box-tabs-tab">
+                                    <a data-toggle="tab" href="#comments_questions" role="tab" aria-expanded="false">
+                                         نظر دارم
+                                    </a>
+                                </li>
+                            </ul>
+                            <div class="card-body default">
+                                <!-- Tab panes -->
+                                <div class="tab-content">
+                                    <div class="tab-pane active" id="desc" role="tabpanel" aria-expanded="false">
+                                        
+                                            <header class="card-header">
+                                                <h3 class="card-title"><span>بررسی تخصصی  {{product.name}} </span></h3>
+                                            </header>
+                                            <div class="parent-expert default">
+                                                <div class="content-expert">
+                                                    <p>
+                                                        {{product.description}}                                                
+                                                    </p>
+                                                </div>
+                                            </div>
+                                    </div>
+                                    <div class="tab-pane params" id="params" role="tabpanel" aria-expanded="false">
+                                        <header class="card-header">
+                                            <h3 class="card-title"><span> مشخصات {{product.name}} </span></h3>
+                                        </header>
+                                        
+                                            <div class="col-12">
+                                                <ul class="list-group ">
+                                                    {% for property in product.specification %}
+                                                    <li class="list-group-item">{{property}}</li>
+                                                    {% endfor %}
+                                                </ul>
+                                            </div>
+                                    </div>
+                                    <div class="tab-pane" id="comments" role="tabpanel" aria-expanded="false">
+                                        
+                                            <header class="card-header">
+                                                <h3 class="card-title"><span>دیدگاه های دیگر کاربران</span></h3>
+                                            </header>
+                                            <div class="comments_form default">
+                                                <ol class="comment-list">
+                                                    <!-- #comment-## -->
+                                                    {% for comment in product.comment_set.all %}
+                                                    {% if comment.is_show %}
+                                                    <li>
+                                                        <div class="comment-body">
+                                                            <div class="comment-author">
+                                                                <img src="{{comment.author.image.url}}" class="avatar"><span class="star3">{{comment.score}}</span><div class="text-h5">{{comment.title}}</div> 
+                                                            </div>
+                                                            <p>{{comment.text}}</p>
+                                                            
+                                                            <ul class="commentul">
+                                                                <li>
+                                                                    {{comment.created_date.year}} / {{comment.created_date.month}} / {{comment.created_date.day}}
+                                                                    
+                                                                    
+                                                                </li>
+                                                                <li>
+                                                                    {{comment.author.get_fullname}}
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                    </li>
+                                                    {% endif %}
+                                                    {% endfor %}
+
+                                                </ol>
+                                            </div>
+                                            
+                                    </div>
+                                    <div class="tab-pane form-comment" id="comments_questions" role="tabpanel" aria-expanded="true">
+                                        <header class="card-header">
+                                            <h3 class="card-title"><span>ارسال نظر </span></h3>
+                                        </header>
+                                        <form action="{% url 'product:validate-comment' %}" method='post' class="comment">
+                                            {% csrf_token %}
+                                            <input type='hidden' name="product_id" value="{{product.id}}">
+                                            <input  class="form-control" name="title" type="text" placeholder="تیتر نظر">
+                                            <br>
+                                            <textarea class="form-control" name="text" placeholder="متن نظر" rows="4"></textarea>
+                                            <br>
+                                            <input class="form-control" name="score" type="number" min="0" max="10" placeholder="(از 10) نمره شما">
+                                            <br>
+                                            {{form.captcha}}
+                                            <br>
+                                            <button type="submit" style="display: block;" class="btn btn-main-masai">ارسال برای تایید</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+<!-- main -->
+{% endblock body %}
+
+
+{% block js %}
+    <script src="{% static 'assets/js/core/jquery.min.js' %}"></script>
+    <script src="{% static 'assets/js/plugins/jquery.ez-plus.js' %}" type="text/javascript"></script>
+    <script src="{% static 'assets/css/plugins/prettyphoto/js/jquery.prettyPhoto.js' %}"></script>
+    <script>
+        function copyElementText(id) {
+            var text = document.getElementById(id).innerText;
+            var elem = document.createElement("textarea");
+            document.body.appendChild(elem);
+            elem.value = text;
+            elem.select();
+            document.execCommand("copy");
+            document.body.removeChild(elem);
+        }
+    </script>
+    <script type="text/javascript" charset="utf-8">
+        $(document).ready(function () {
+    				$("area[rel^='prettyPhoto']").prettyPhoto();
+
+				$(".gallery:first a[rel^='prettyPhoto']").prettyPhoto({animation_speed:'normal',theme:'light_square',slideshow:3000, autoplay_slideshow: false});
+				$(".gallery:gt(0) a[rel^='prettyPhoto']").prettyPhoto({animation_speed:'fast',slideshow:10000, hideflash: true});
+                $("#id_captcha_1").addClass("form-control").attr('placeholder','لطفا کد امنیتی را وارد کنید')
+
+			  });
+    </script>
+{% endblock js %}

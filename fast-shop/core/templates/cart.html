@@ -1,0 +1,134 @@
+﻿{% extends 'base.html' %}
+{% load static %}
+
+{% block body %}
+<!-- main -->
+<main class="cart-page default space-top-30">
+    <div class="container">
+        <div class="row">
+            <div class="col-12 text-center">
+                <ul class="order-steps">
+                    <li>
+                        <a href="#" class="active">
+                            <span>سبدخرید</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <span>تکمیل سفارش</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <span>اتمام خرید و ارسال</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="cart_content col-xl-12 col-lg-12 col-md-12">
+                <header class="card-header">
+                    <h3 class="card-title"><span>سبد خرید شما</span></h3>
+                </header>
+                <div class="table-responsive default">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col">محصول</th>
+                                <th scope="col">سبد خرید شما</th>
+                                <th scope="col">قیمت واحد</th>
+                                <th scope="col">تعداد</th>
+                                <th scope="col">قیمت نهایی</th>
+                                <th scope="col">به روزرسانی</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for product in products %}
+                            <tr class="cart_item">
+                                <td>
+                                    <img src="{{product.image.url}}" alt="{{product.alt}}">
+                                    <a href="{% url 'cart:remove_from_cart' %}?product_id={{product.id}}">
+                                        <i class="fa fa-times" aria-hidden="true"></i>
+                                    </a>
+                                </td>
+                                <td>
+                                    <h3 class="cart_title">
+                                        <a href="{% url 'product:detail-view' id=product.id %}">
+                                            {{product.name}}
+                                        </a>
+                                    </h3>
+                                    <div class="cart_content">
+
+                                        <div><span>رنگ </span><span  class="item_property" style="background-color: {{product.color}};">{{product.color}}</span></div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="cart_price">
+                                        {% if product.discount %}
+                                        <del><span>{{product.price}}<span>تومان</span></span></del>
+                                        {% endif %}
+                                        <ins><span>{{product.main_discount_call}}<span>تومان</span></span></ins>
+                                    </div>
+                                </td>
+                                <td><input type="number" class="tedad" value="{{product.customer_count}}" id="{{product.id}}"/></td>
+                                <td class="price_alltd"> {% widthratio product.main_discount_call 1 product.customer_count  %} <span>تومان</span></td>
+                                <td><button type="submit" data-count_id="{{product.id}}" class="btn btn-second-masai">به روز رسانی</button></td>
+                            </tr>
+                            {% endfor %}
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="cart-page-content col-xl-12 col-lg-12 col-md-12">
+                <div class="row cart_details">
+                    
+                    <div class="cart-page-content col-xl-8 col-lg-7 col-md-7 ">
+                        <input type="text" placeholder="کد تخفیف" class="input_second input_all width-200" disabled>
+                        <a href="#" class="btn btn-main-masai"> اعمال</a>
+                        <div class="text_details">
+                            <p>
+                                افزودن کالا به سبد خرید به معنی رزرو آن نیست با توجه به محدودیت موجودی سبد خود را ثبت و خرید را تکمیل کنید.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="cart-page-aside col-xl-4 col-lg-5 col-md-5 divider_details">
+                        <table class="table table_details">
+                            <tbody>
+                                <tr>
+                                    <td>قیمت کل سفارش:</td>
+                                    <td>{{total_price}} <span>تومان</span></td>
+                                </tr>
+                                <tr>
+                                    <td>بسته‌بندی و ارسال:</td>
+                                    <td>وابسته به نوع ارسال</td>
+                                </tr>
+                                <tr class="all">
+                                    <td>قیمت قابل پرداخت:</td>
+                                    <td>{{total_price}} <span>تومان</span></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2"><a href="{% url 'cart:confirm_order' %}" class="btn big_btn btn-main-masai"> گام بعدی</a></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>                
+        </div>
+    </div>
+
+</main>
+<!-- main -->
+{% endblock body %}
+
+{% block js %}
+<script>
+    $(document).ready(function(){
+        $('.btn-second-masai').click(function(){
+            let countId = $(this).data('count_id')
+            let count = $('#'+countId).val()
+            window.location.href = '{% url "cart:change_orderitem_count" %}' + `?product_id=${countId}&count=${count}`
+        });
+    });
+</script>
+{% endblock js %}

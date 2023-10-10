@@ -1,0 +1,64 @@
+{% load static %}
+<div class="profile-page-aside col-xl-3 col-lg-4 col-md-6 center-section order-1">
+    <div class="profile-card-1">
+        <!--image-->
+        <div class="img">
+            {% if profile.image %}
+            <img src="{{profile.image.url}}" />
+            {% else %}
+            <img src="{% static 'assets/img/profile/1.png' %}" />
+            {% endif %}
+        </div>
+        <a class="view-more" href="{% url 'account:profile_edit' %}">
+            <i class="fa fa-plus-circle"></i>
+        </a>
+        <!--text-->
+        <div class="mid-section">
+            <div class="name">{{ profile.get_fullname }}</div>
+            <div class="line"></div>
+            <div class="stats">
+                <div class="stat">
+                    {{current_orders_count}}
+                    <div class="subtext">سفارش جاری</div>
+                </div>
+                <div class="stat">
+                    {{delivered_orders_count}}
+                    <div class="subtext">تحویل داده</div>
+                </div>
+                <div class="stat">
+                    {{cancelled_orders_count}}
+                    <div class="subtext">مرجوع شده</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="responsive-profile-menu show-md location_me">
+        <div class="btn-group">
+            <button type="button" class="btn btn-second-masai dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="fa fa-navicon"></i>
+                حساب کاربری شما
+            </button>
+            <div class="dropdown-menu dropdown-menu-right text-right">
+                {% for item in sidebar_items %}
+                <a href="{{item.link}}" class="dropdown-item  ">
+                    <i class="fa {{item.icon}} colormain" aria-hidden="true"></i>
+                    {{item.name}}
+                </a>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    <div class="profile-menu">
+        <ul class="profile-menu-items">
+            {% for item in sidebar_items %}
+            <li>
+                <a href="{{item.link}}" id="profile" class="dropdown-item">
+                    <i class="fa {{item.icon}} colormain"></i>
+                    {{item.name}}
+                </a>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+
